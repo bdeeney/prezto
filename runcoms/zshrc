@@ -10,4 +10,23 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
 # Customize to your needs...
+alias ygup="python setup.py register -r yg sdist bdist_wheel upload -r yg"
+alias pypiup="python setup.py sdist bdist_wheel upload -r pypi"
+alias yghammer='killall -9 postgres ; killall -9 mongod ; killall -9 python'
+alias hf="git hf"
+alias gf="git gf"
+alias tow=gittower
+alias fixhostname='screen -dRS hostname sudo watch -n 0.1 hostname miranda.local'
+alias gittag='git describe --tags --abbrev=0'
+hgtag() { hg log --template "{latesttag}\n" -r "${1:-.}" }
+mirror-repo() {
+    tmpdir=$(mktemp -d ./repo-XXXXXX)
+    git clone --mirror "kiln://$1" $tmpdir
+    git -C $tmpdir push --mirror gitlab://${2:-$1}
+    rm -Rf $tmpdir
+}
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
